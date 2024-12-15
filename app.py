@@ -3,11 +3,9 @@ import pandas as pd
 import numpy as np
 import pickle
 
-# Заголовок приложения
-st.title("Прогнозирование заработка")
-st.write("Это приложение предсказывает, превысит ли ваш средний заработок порог $50k.")
+st.title("Гадание на зарплату")
+st.write("Это приложение предсказывает, превысит ли ваш заработок ПЯТЬДЕСЯТ. ТЫСЯЧ. ДОЛЛАРОВ (голосом Дудя).")
 
-# Загрузка модели
 with open('best_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
@@ -25,11 +23,10 @@ relationship_options = ['Not-in-family', 'Other-relative', 'Own-child', 'Unmarri
 race_options = ['Asian-Pac-Islander', 'Black', 'Other', 'White']
 sex_options = ['Male', 'Female']
 
-relationship = st.sidebar.selectbox("Отношения", relationship_options)
+relationship = st.sidebar.selectbox("Семейное положение", relationship_options)
 race = st.sidebar.selectbox("Раса", race_options)
 sex = st.sidebar.selectbox("Пол", sex_options)
 
-# Создание DataFrame из введенных данных
 input_data = pd.DataFrame({
     'age': [age],
     'fnlwgt': [fnlwgt],
@@ -42,19 +39,15 @@ input_data = pd.DataFrame({
     'sex': [sex]
 })
 
-# Преобразование категориальных признаков в one-hot encoded формат
 input_data_encoded = pd.get_dummies(input_data, columns=['relationship', 'race', 'sex'], drop_first=False)
 
-# Убедитесь, что порядок столбцов в input_data_encoded совпадает с порядком столбцов, использованным при обучении модели
-# Получите порядок столбцов, использованных при обучении модели
+
 expected_columns = model.feature_names_in_
 
-# Добавьте отсутствующие столбцы с нулевыми значениями
 missing_columns = set(expected_columns) - set(input_data_encoded.columns)
 for column in missing_columns:
     input_data_encoded[column] = 0
 
-# Упорядочиваем столбцы в input_data_encoded в том же порядке, что и при обучении модели
 input_data_encoded = input_data_encoded[expected_columns]
 
 # Прогнозирование
@@ -62,5 +55,7 @@ if st.button("Предсказать"):
     prediction = model.predict(input_data_encoded)
     if prediction[0] == 1:
         st.success("Ваш заработок превысит $50k!")
+        st.image("da8775f2-f63a-4dbe-89f5-31d8ba85a38d-2568619454.png", caption="Поздравляем!", use_container_width=True)
     else:
         st.error("Ваш заработок НЕ превысит $50k.")
+        st.image("Sad-Pepe-The-Frog-PNG-Transparent-Picture-4087480041.png", caption="Нам очень жаль...", use_container_width=True)
