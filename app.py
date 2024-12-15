@@ -56,6 +56,8 @@ if st.button("Предсказать"):
     if prediction[0] == 1:
         st.success("Ваш заработок превысит $50k!")
         st.image("da8775f2-f63a-4dbe-89f5-31d8ba85a38d-2568619454.png", caption="Поздравляем!", use_container_width=True)
+           # Добавляем бомбический трек для положительного прогноза
+        st.audio("lida-serega-pirat-chsv (mp3cut.net).mp3", format="audio/mp3")
     else:
         st.error("Ваш заработок НЕ превысит $50k.")
         st.image("Sad-Pepe-The-Frog-PNG-Transparent-Picture-4087480041.png", caption="Нам очень жаль...", use_container_width=True)
